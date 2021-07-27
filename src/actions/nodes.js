@@ -50,3 +50,45 @@ export function checkNodeStatuses(list) {
     });
   };
 }
+
+const getNodeBlocksSuccess = (node, res) => {
+  return {
+    type: types.GET_NODE_BLOCK_SUCCESS,
+    node,
+    res,
+  };
+};
+
+const getNodeBlocksFailure = (node) => {
+  return {
+    type: types.GET_NODE_BLOCK_FAILURE,
+    node,
+  };
+};
+
+export function getNodeBlocks(node) {
+  return async (dispatch) => {
+    try {
+      const res = await fetch(`${node.url}/api/v1/blocks`);
+      
+      const json = await res.json();
+
+      dispatch(getNodeBlocksSuccess(node, json));
+    if (res.status >= 400) {
+      dispatch(getNodeBlocksFailure(node));
+      return;
+    }
+    } catch (e) {
+      dispatch(getNodeBlocksFailure(node));
+    }
+    
+  }
+}
+
+export function getNodesBlocks(list) {
+  return (dispatch) => {
+    list.forEach((node) => {
+      dispatch(getNodeBlocks(node));
+    });
+  };
+}

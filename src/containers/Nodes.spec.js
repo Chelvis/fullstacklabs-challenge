@@ -1,15 +1,16 @@
-import React from "react";
 import { shallow } from "enzyme";
-import configureMockStore from "redux-mock-store";
-import thunk from 'redux-thunk';
+import React from "react";
 import { Provider } from "react-redux";
 import { create } from "react-test-renderer";
-import ConnectedNodes, { Nodes } from "./Nodes";
+import configureMockStore from "redux-mock-store";
+import thunk from 'redux-thunk';
 import Node from "../components/Node";
+import ConnectedNodes, { Nodes } from "./Nodes";
 
 describe("<Nodes />", () => {
   const actions = {
-    checkNodeStatuses: jest.fn()
+    checkNodeStatuses: jest.fn(),
+    getNodesBlocks: jest.fn()
   };
 
   const nodes = {
@@ -18,13 +19,15 @@ describe("<Nodes />", () => {
         url: 'https://thawing-springs-53971.herokuapp.com',
         online: false,
         name: 'Node 1',
-        loading: false
+        loading: false,
+        data: []
       },
       {
         url: 'https://secret-lowlands-62331.herokuapp.com',
         online: false,
         name: 'Node 2',
-        loading: false
+        loading: false,
+        data: []
       }
     ]
   };

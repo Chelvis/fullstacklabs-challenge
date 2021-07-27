@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
-import reducer from './nodes';
 import initialState from './initialState';
+import reducer from './nodes';
 
 
 describe('Reducers::Nodes', () => {
@@ -11,13 +11,15 @@ describe('Reducers::Nodes', () => {
   const nodeA = {
     url: 'http://localhost:3002',
     online: false,
-    name: null
+    name: null,
+    data: undefined
   };
 
   const nodeB = {
     url: 'http://localhost:3003',
     online: false,
-    name: null
+    name: null,
+    data: undefined
   };
 
   it('should set initial state by default', () => {
@@ -85,6 +87,42 @@ describe('Reducers::Nodes', () => {
           online: false,
           name: 'alpha',
           loading: false
+        },
+        nodeB
+      ]
+    };
+
+    expect(reducer(appState, action)).toEqual(expected);
+  });
+
+  it('should handle GET_NODE_BLOCK_SUCCESS', () => {
+    const appState = {
+      list: [nodeA, nodeB]
+    };
+    const action = { type: ActionTypes.GET_NODE_BLOCK_SUCCESS, node: nodeA, res: {data: [{data: 'data'}]} };
+    const expected = {
+      list: [
+        {
+          ...nodeA,
+          data: [{data: 'data'}]
+        },
+        nodeB
+      ]
+    };
+
+    expect(reducer(appState, action)).toEqual(expected);
+  });
+
+  it('should handle GET_NODE_BLOCK_FAILURE', () => {
+    const appState = {
+      list: [nodeA, nodeB]
+    };
+    const action = { type: ActionTypes.GET_NODE_BLOCK_FAILURE, node: nodeA };
+    const expected = {
+      list: [
+        {
+          ...nodeA,
+          data: []
         },
         nodeB
       ]

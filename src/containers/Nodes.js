@@ -1,10 +1,10 @@
-import React from "react";
+import { Box, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
+import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../actions/nodes";
 import Node from "../components/Node";
-import { Typography, Box } from "@material-ui/core";
 
 export class Nodes extends React.Component {
   constructor(props) {
@@ -17,6 +17,7 @@ export class Nodes extends React.Component {
 
   componentDidMount() {
     this.props.actions.checkNodeStatuses(this.props.nodes.list);
+    this.props.actions.getNodesBlocks(this.props.nodes.list);
   }
 
   toggleNodeExpanded(node) {

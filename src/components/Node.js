@@ -1,19 +1,30 @@
-import React from "react";
-import PropTypes from "prop-types";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-  makeStyles,
-  Box,
+  Accordion, AccordionDetails, AccordionSummary, Box, makeStyles, Typography
 } from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import PropTypes from "prop-types";
+import React from "react";
 import colors from "../constants/colors";
 import Status from "./Status";
 
 const Node = ({ node, expanded, toggleNodeExpanded }) => {
   const classes = useStyles();
+
+  const buildNodeBlocks = nodeData => {
+    if (!nodeData) {
+      return <div>Impossible to retrieve data.</div>
+    } else if (!nodeData.length) {
+      return <div>No data to show.</div>
+    }
+    return nodeData.map((data, index) => {
+      return <div key={index} className={classes.nodeBox}>
+        <Typography className={classes.nodeId}>{data.id.padStart(3, '0')}</Typography>
+        <Typography variant="p">{data.attributes.data}</Typography>
+      </div>
+    })
+  }
+
+
   return (
     <Accordion
       elevation={3}
@@ -46,7 +57,9 @@ const Node = ({ node, expanded, toggleNodeExpanded }) => {
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>Blocks go here</Typography>
+        <Box width="100%">
+          {buildNodeBlocks(node.data)}
+        </Box>
       </AccordionDetails>
     </Accordion>
   );
@@ -96,6 +109,16 @@ const useStyles = makeStyles((theme) => ({
     color: colors.faded,
     lineHeight: 2,
   },
+  nodeBox: {
+    background: '#e0e0e0',
+    padding: '5px',
+    margin: '5px 0',
+    borderRadius: '3px'
+  },
+  nodeId: {
+    fontSize: theme.typography.pxToRem(10),
+    color: 'blue'
+  }
 }));
 
 Node.propTypes = {

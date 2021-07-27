@@ -1,6 +1,6 @@
+import mockFetch from "cross-fetch";
 import * as ActionTypes from "../constants/actionTypes";
 import * as ActionCreators from "./nodes";
-import mockFetch from "cross-fetch";
 
 jest.mock("cross-fetch");
 
@@ -16,6 +16,7 @@ describe("Actions", () => {
     url: "http://localhost:3002",
     online: false,
     name: null,
+    data: undefined
   };
 
   it("should fetch the node status", async () => {
@@ -58,6 +59,44 @@ describe("Actions", () => {
       {
         type: ActionTypes.CHECK_NODE_STATUS_FAILURE,
         node,
+      },
+    ];
+
+    expect(dispatch.mock.calls.flat()).toEqual(expected);
+  });
+
+  it("should fetch the node blocks", async () => {
+    mockFetch.mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json() {
+          return Promise.resolve({ data: [{id: '1'}] });
+        },
+      })
+    );
+    await ActionCreators.getNodeBlocks(node)(dispatch);
+    const expected = [
+      {
+        type: ActionTypes.GET_NODE_BLOCK_SUCCESS,
+        node,
+        res: { data: [{id: '1'}] },
+      },
+    ];
+
+    expect(dispatch.mock.calls.flat()).toEqual(expected);
+  });
+
+  it("should fail to fetch the node blocks", async () => {
+    mockFetch.mockReturnValueOnce(
+      Promise.resolve({
+        status: 400,
+      })
+    );
+    await ActionCreators.getNodeBlocks(node)(dispatch);
+    const expected = [
+      {
+        type: ActionTypes.GET_NODE_BLOCK_FAILURE,
+        node
       },
     ];
 
