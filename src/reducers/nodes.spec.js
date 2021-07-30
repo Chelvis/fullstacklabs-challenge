@@ -12,14 +12,14 @@ describe('Reducers::Nodes', () => {
     url: 'http://localhost:3002',
     online: false,
     name: null,
-    data: undefined
+    blocks: undefined
   };
 
   const nodeB = {
     url: 'http://localhost:3003',
     online: false,
     name: null,
-    data: undefined
+    blocks: undefined
   };
 
   it('should set initial state by default', () => {
@@ -74,7 +74,8 @@ describe('Reducers::Nodes', () => {
           ...nodeA,
           online: true,
           name: 'alpha',
-          loading: false
+          loading: false,
+          blocks: undefined
         },
         nodeB
       ]
@@ -86,7 +87,8 @@ describe('Reducers::Nodes', () => {
           ...nodeA,
           online: false,
           name: 'alpha',
-          loading: false
+          loading: false,
+          blocks: undefined
         },
         nodeB
       ]
@@ -95,16 +97,16 @@ describe('Reducers::Nodes', () => {
     expect(reducer(appState, action)).toEqual(expected);
   });
 
-  it('should handle GET_NODE_BLOCK_SUCCESS', () => {
+  it('should handle GET_NODE_BLOCKS_SUCCESS', () => {
     const appState = {
       list: [nodeA, nodeB]
     };
-    const action = { type: ActionTypes.GET_NODE_BLOCK_SUCCESS, node: nodeA, res: {data: [{data: 'data'}]} };
+    const action = { type: ActionTypes.GET_NODE_BLOCKS_SUCCESS, node: nodeA, res: [{id: '1'}] };
     const expected = {
       list: [
         {
           ...nodeA,
-          data: [{data: 'data'}]
+          blocks: [{id: '1'}]
         },
         nodeB
       ]
@@ -113,16 +115,28 @@ describe('Reducers::Nodes', () => {
     expect(reducer(appState, action)).toEqual(expected);
   });
 
-  it('should handle GET_NODE_BLOCK_FAILURE', () => {
+  it('should handle GET_NODE_BLOCKS_FAILURE', () => {
     const appState = {
-      list: [nodeA, nodeB]
+      list: [
+        {
+          ...nodeA,
+          online: false,
+          name: 'alpha',
+          loading: false,
+          blocks: undefined
+        },
+        nodeB
+      ]
     };
-    const action = { type: ActionTypes.GET_NODE_BLOCK_FAILURE, node: nodeA };
+    const action = { type: ActionTypes.GET_NODE_BLOCKS_FAILURE, node: nodeA };
     const expected = {
       list: [
         {
           ...nodeA,
-          data: []
+          online: false,
+          name: 'alpha',
+          loading: false,
+          blocks: []
         },
         nodeB
       ]
@@ -130,4 +144,5 @@ describe('Reducers::Nodes', () => {
 
     expect(reducer(appState, action)).toEqual(expected);
   });
+
 });

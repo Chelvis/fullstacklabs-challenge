@@ -16,7 +16,7 @@ describe("Actions", () => {
     url: "http://localhost:3002",
     online: false,
     name: null,
-    data: undefined
+    blocks: undefined
   };
 
   it("should fetch the node status", async () => {
@@ -65,21 +65,21 @@ describe("Actions", () => {
     expect(dispatch.mock.calls.flat()).toEqual(expected);
   });
 
-  it("should fetch the node blocks", async () => {
+  it("should fetch the node block", async () => {
     mockFetch.mockReturnValueOnce(
       Promise.resolve({
         status: 200,
         json() {
-          return Promise.resolve({ data: [{id: '1'}] });
+          return Promise.resolve({ data: [{id: '0'}] });
         },
       })
     );
     await ActionCreators.getNodeBlocks(node)(dispatch);
     const expected = [
       {
-        type: ActionTypes.GET_NODE_BLOCK_SUCCESS,
+        type: ActionTypes.GET_NODE_BLOCKS_SUCCESS,
         node,
-        res: { data: [{id: '1'}] },
+        res: [{id: '0'}],
       },
     ];
 
@@ -95,11 +95,14 @@ describe("Actions", () => {
     await ActionCreators.getNodeBlocks(node)(dispatch);
     const expected = [
       {
-        type: ActionTypes.GET_NODE_BLOCK_FAILURE,
-        node
+        type: ActionTypes.GET_NODE_BLOCKS_FAILURE,
+        node,
       },
     ];
 
     expect(dispatch.mock.calls.flat()).toEqual(expected);
   });
+
+
 });
+

@@ -20,14 +20,14 @@ describe("<Nodes />", () => {
         online: false,
         name: 'Node 1',
         loading: false,
-        data: []
+        blocks: [{id: '1', attributes: {data: 'test 1'}}]
       },
       {
         url: 'https://secret-lowlands-62331.herokuapp.com',
         online: false,
         name: 'Node 2',
         loading: false,
-        data: []
+        blocks: [{id: '2', attributes: {data: 'test 2'}}]
       }
     ]
   };

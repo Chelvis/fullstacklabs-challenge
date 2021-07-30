@@ -10,21 +10,20 @@ import Status from "./Status";
 const Node = ({ node, expanded, toggleNodeExpanded }) => {
   const classes = useStyles();
 
-  const buildNodeBlocks = nodeData => {
-    if (!nodeData) {
-      return <div>Impossible to retrieve data.</div>
-    } else if (!nodeData.length) {
-      return <div>No data to show.</div>
+  const buildBlocks = (blocks) => {
+    if (blocks === undefined) {
+      return <Typography>Impossible to retreive data.</Typography>
+    } else if (!blocks.length) {
+      return <Typography>No data to show.</Typography>
     }
-    return nodeData.map((data, index) => {
-      return <div key={index} className={classes.nodeBox}>
-        <Typography className={classes.nodeId}>{data.id.padStart(3, '0')}</Typography>
-        <Typography variant="p">{data.attributes.data}</Typography>
-      </div>
+    return blocks.map((block, index) => {
+      return <Box key={index} className={classes.block}>
+        <Typography className={classes.block_id}>{block.id.padStart(3, '0')}</Typography>
+        <Typography>{block.attributes.data}</Typography>
+      </Box>
     })
   }
-
-
+  
   return (
     <Accordion
       elevation={3}
@@ -57,8 +56,8 @@ const Node = ({ node, expanded, toggleNodeExpanded }) => {
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <Box width="100%">
-          {buildNodeBlocks(node.data)}
+        <Box className={classes.block_wrapper}>
+          {buildBlocks(node.blocks)}
         </Box>
       </AccordionDetails>
     </Accordion>
@@ -109,15 +108,18 @@ const useStyles = makeStyles((theme) => ({
     color: colors.faded,
     lineHeight: 2,
   },
-  nodeBox: {
-    background: '#e0e0e0',
-    padding: '5px',
-    margin: '5px 0',
-    borderRadius: '3px'
+  block_wrapper: {
+    width: '100%'
   },
-  nodeId: {
-    fontSize: theme.typography.pxToRem(10),
-    color: 'blue'
+  block: {
+    background: 'rgba(0,0,0,.12)',
+    padding: '8px',
+    borderRadius: '2px',
+    margin: '4px 0'
+  },
+  block_id: {
+    color: '#304FFE',
+    fontSize: '10px'
   }
 }));
 
